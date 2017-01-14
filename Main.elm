@@ -3,12 +3,28 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
+-- import String
 
 
 {-- MODEL --}
 
+type alias Model =
+  { number : Int
+  , content : String
+  , name : String
+  , password : String
+  , passwordAgain : String
+  }
+
+model : Model
+
 model =
-  {number = 0}
+  { number = 0
+  , content = ""
+  , name = ""
+  , password = ""
+  , passwordAgain = ""
+  }
 
 --}
 
@@ -20,7 +36,9 @@ type Msg =
   | DecreaseByOne
   | DecreaseByTen
   | Reset
+  | Change String
 
+update : Msg -> Model -> Model
 update msg model =
   case msg of
     IncreaseByOne ->
@@ -33,11 +51,12 @@ update msg model =
       { model | number = model.number - 10 }
     Reset ->
       { model | number = 0 }
-
+    Change newContent ->
+      { model | content = newContent}
 --}
 
 {-- VIEW --}
-
+view : Model -> Html Msg
 view model =
   div [ style
           [ ("margin", "0 auto" )
@@ -50,21 +69,30 @@ view model =
             ]
           ]
       [ text <| toString model.number ]
-    , div []
-        [
-        button [ onClick IncreaseByOne ] [text <| "+1"]
-      , button [ onClick IncreaseByTen ] [text <| "+10"]
-      ]
-    , div [] [
-        button [ onClick DecreaseByOne ] [ text <| "-1"],
-        button [ onClick DecreaseByTen ] [ text <| "-10"]
-      ]
-    , div [] [
-        button [ onClick Reset ] [ text <| "Reset Value"]
-      ]
+      , div [] [
+          button [ onClick IncreaseByOne ] [text <| "+1"]
+        , button [ onClick IncreaseByTen ] [text <| "+10"]
+        ]
+      , div [] [
+          button [ onClick DecreaseByOne ] [ text <| "-1"],
+          button [ onClick DecreaseByTen ] [ text <| "-10"]
+        ]
+      , div [] [
+          button [ onClick Reset ] [ text <| "Reset Value"]
+        ]
+    , div [ style
+            [ ("text-align", "center")
+            , ("border", "1px solid green")
+            , ("width", "200px")
+            , ("margin", "0 auto")
+            ]
+          ] [
+            input [ placeholder "Text to reverse here", onInput Change] []
+            , div [] [ text <| (String.reverse model.content)]
+          ]
     ]
 
-{--}
+--}
 
 main =
   beginnerProgram

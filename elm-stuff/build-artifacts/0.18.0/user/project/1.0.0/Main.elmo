@@ -18,13 +18,24 @@ var _user$project$Main$update = F2(
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{number: model.number - 10});
-			default:
+			case 'Reset':
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{number: 0});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{content: _p0._0});
 		}
 	});
-var _user$project$Main$model = {number: 0};
+var _user$project$Main$model = {number: 0, content: '', name: '', password: '', passwordAgain: ''};
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {number: a, content: b, name: c, password: d, passwordAgain: e};
+	});
+var _user$project$Main$Change = function (a) {
+	return {ctor: 'Change', _0: a};
+};
 var _user$project$Main$Reset = {ctor: 'Reset'};
 var _user$project$Main$DecreaseByTen = {ctor: 'DecreaseByTen'};
 var _user$project$Main$DecreaseByOne = {ctor: 'DecreaseByOne'};
@@ -164,7 +175,62 @@ var _user$project$Main$view = function (model) {
 									}),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid green'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'width', _1: '200px'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$placeholder('Text to reverse here'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$Change),
+												_1: {ctor: '[]'}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													_elm_lang$core$String$reverse(model.content)),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
