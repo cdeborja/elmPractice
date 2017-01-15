@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 -- import String
-
+import Char exposing (..)
 
 {-- MODEL --}
 
@@ -37,6 +37,9 @@ type Msg =
   | DecreaseByTen
   | Reset
   | Change String
+  | Name String
+  | Password String
+  | PasswordAgain String
 
 update : Msg -> Model -> Model
 update msg model =
@@ -52,7 +55,13 @@ update msg model =
     Reset ->
       { model | number = 0 }
     Change newContent ->
-      { model | content = newContent}
+      { model | content = newContent }
+    Name name ->
+      { model | name = name }
+    Password password ->
+      { model | password = password }
+    PasswordAgain passwordAgain ->
+      { model | passwordAgain = passwordAgain }
 --}
 
 {-- VIEW --}
@@ -90,7 +99,31 @@ view model =
             input [ placeholder "Text to reverse here", onInput Change] []
             , div [] [ text <| (String.reverse model.content)]
           ]
+    , div []
+      [ input [ type_ "text", placeholder "Name", onInput Name] []
+      , input [ type_ "password", placeholder "Password", onInput Password ] []
+      , input [ type_ "password", placeholder "Re enter password", onInput PasswordAgain ] []
+      , viewValidation model
+      ]
     ]
+
+viewValidation : Model -> Html Msg
+viewValidation model =
+  let
+    (color, message) =
+      if (String.length model.password) < 8 then
+        ("black", "Password needs to be longer than 8 characters")
+      else if String.any Char.isUpper model.password then
+        ("blue", "Contains upper")
+      else if model.password == model.passwordAgain then
+        ("green", "Passwords match")
+      else
+        ("red", "Error: Passwords do not match")
+
+  in
+    div [ style [("color", color)]]
+        [text message]
+
 
 --}
 

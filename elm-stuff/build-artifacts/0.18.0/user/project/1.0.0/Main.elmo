@@ -1,234 +1,131 @@
+var _user$project$Main$decodeGifUrl = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'data',
+		_1: {
+			ctor: '::',
+			_0: 'image_url',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$Model = F2(
+	function (a, b) {
+		return {topic: a, gifUrl: b};
+	});
+var _user$project$Main$ChangeTopic = function (a) {
+	return {ctor: 'ChangeTopic', _0: a};
+};
+var _user$project$Main$NewGif = function (a) {
+	return {ctor: 'NewGif', _0: a};
+};
+var _user$project$Main$getRandomGif = function (topic) {
+	var url = A2(_elm_lang$core$Basics_ops['++'], 'https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=', topic);
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Main$NewGif,
+		A2(_elm_lang$http$Http$get, url, _user$project$Main$decodeGifUrl));
+};
+var _user$project$Main$init = function (topic) {
+	return {
+		ctor: '_Tuple2',
+		_0: A2(_user$project$Main$Model, topic, 'waiting.gif'),
+		_1: _user$project$Main$getRandomGif(topic)
+	};
+};
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
-			case 'IncreaseByOne':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{number: model.number + 1});
-			case 'IncreaseByTen':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{number: model.number + 10});
-			case 'DecreaseByOne':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{number: model.number - 1});
-			case 'DecreaseByTen':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{number: model.number - 10});
-			case 'Reset':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{number: 0});
+			case 'ChangeTopic':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{topic: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'MorePlease':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Main$getRandomGif(model.topic)
+				};
 			default:
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{content: _p0._0});
+				if (_p0._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: A2(_user$project$Main$Model, model.topic, _p0._0._0),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
 		}
 	});
-var _user$project$Main$model = {number: 0, content: '', name: '', password: '', passwordAgain: ''};
-var _user$project$Main$Model = F5(
-	function (a, b, c, d, e) {
-		return {number: a, content: b, name: c, password: d, passwordAgain: e};
-	});
-var _user$project$Main$Change = function (a) {
-	return {ctor: 'Change', _0: a};
-};
-var _user$project$Main$Reset = {ctor: 'Reset'};
-var _user$project$Main$DecreaseByTen = {ctor: 'DecreaseByTen'};
-var _user$project$Main$DecreaseByOne = {ctor: 'DecreaseByOne'};
-var _user$project$Main$IncreaseByTen = {ctor: 'IncreaseByTen'};
-var _user$project$Main$IncreaseByOne = {ctor: 'IncreaseByOne'};
+var _user$project$Main$MorePlease = {ctor: 'MorePlease'};
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$style(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'width', _1: '400px'},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
-							_1: {ctor: '[]'}
-						}
-					}
-				}),
-			_1: {ctor: '[]'}
-		},
+		{ctor: '[]'},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$input,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
+					_0: _elm_lang$html$Html_Attributes$placeholder('Topic'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$ChangeTopic),
+						_1: {ctor: '[]'}
+					}
 				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(model.number)),
-					_1: {ctor: '[]'}
-				}),
+				{ctor: '[]'}),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$div,
+					_elm_lang$html$Html$h2,
 					{ctor: '[]'},
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseByOne),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('+1'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseByTen),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('+10'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
+						_0: _elm_lang$html$Html$text(model.topic),
+						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$div,
-						{ctor: '[]'},
+						_elm_lang$html$Html$button,
 						{
 							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseByOne),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('-1'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseByTen),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('-10'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$MorePlease),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('More Please!'),
+							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$div,
+							_elm_lang$html$Html$br,
 							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Reset),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Reset Value'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}),
+							{ctor: '[]'}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$div,
+								_elm_lang$html$Html$img,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$style(
-										{
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid green'},
-												_1: {
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 'width', _1: '200px'},
-													_1: {
-														ctor: '::',
-														_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}),
+									_0: _elm_lang$html$Html_Attributes$src(model.gifUrl),
 									_1: {ctor: '[]'}
 								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$input,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$placeholder('Text to reverse here'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onInput(_user$project$Main$Change),
-												_1: {ctor: '[]'}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$div,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text(
-													_elm_lang$core$String$reverse(model.content)),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}),
+								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -236,5 +133,10 @@ var _user$project$Main$view = function (model) {
 			}
 		});
 };
-var _user$project$Main$main = _elm_lang$html$Html$beginnerProgram(
-	{model: _user$project$Main$model, update: _user$project$Main$update, view: _user$project$Main$view})();
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{
+		init: _user$project$Main$init('stars'),
+		view: _user$project$Main$view,
+		update: _user$project$Main$update,
+		subscriptions: _user$project$Main$subscriptions
+	})();
